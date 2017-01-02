@@ -1,0 +1,15 @@
+language: php
+
+php:
+   - 7.1
+
+install:
+   - composer install
+   - mkdir -p build/logs
+
+script:
+   - vendor/bin/phpunit -c tests/config/phpunit.xml --coverage-clover build/logs/clover.xml
+
+after_success:
+   - composer require --dev satooshi/php-coveralls:1.*
+   - vendor/bin/coveralls -v --coverage_clover=build/logs/clover.xml
