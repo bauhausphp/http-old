@@ -1,29 +1,30 @@
 {
   "name": "bauhaus/http",
-  "description": "Define and implement HTTP representations.",
+  "description": "Implement HTTP interfaces defined on PSR-7 through TDD.",
 
   "type": "library",
   "license": "MIT",
 
   "keywords": [
     "bauhaus",
-    "http"
+    "http",
+    "psr7 implamentation"
   ],
 
   "authors": [
     {
       "name": "Felipe Martins",
-      "homepage": "http://fefas.net"
+      "homepage": "https://blog.fefas.net"
     }
   ],
 
   "support": {
-    "issues": "https://github.com/bauhausphp/package-http/issues",
-    "source": "https://github.com/bauhausphp/package-http"
+    "issues": "https://github.com/bauhausphp/http/issues",
+    "source": "https://github.com/bauhausphp/http"
   },
 
   "require": {
-    "php": ">=7.0",
+    "php": ">=7.1",
     "psr/http-message": "1.*"
   },
 
