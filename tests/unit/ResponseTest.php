@@ -7,7 +7,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function responseIsCreatedWithTheStatusCode200ByDefault()
+    public function responseIsCreatedWithTheStatusCode200IfNoneIsGiven()
     {
         $response = new Response();
 
@@ -18,7 +18,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function createNewResponseGivenAStatusCodeAndExpectingTheRecommendedReasonPhrase()
+    public function createResponseWithRecommendedReasonPhraseForTheGivenStatusCode()
     {
         $response = new Response();
 
@@ -32,7 +32,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function createNewResponseGivenAStatusCodeAndAReasonPhrase()
+    public function createResponseGivenAStatusCodeAndAReasonPhrase()
     {
         $response = new Response();
 
