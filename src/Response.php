@@ -9,12 +9,14 @@ use Bauhaus\Http\Response\StatusInterface;
 
 class Response extends Message implements ResponseInterface
 {
+    const DEFAULT_STATUS_CODE = 200;
+
     private $status = null;
 
     public function __construct(StatusInterface $status = null)
     {
         if (null === $status) {
-            $status = new Status(200);
+            $status = new Status(self::DEFAULT_STATUS_CODE);
         }
 
         $this->status = $status;
