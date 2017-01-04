@@ -10,6 +10,8 @@ class HeaderField implements HeaderFieldInterface
     public function __construct(string $name, $value)
     {
         $arrayValue = $this->transformValueToArray($value);
+        // TODO validate $name
+        // TODO validate $value
 
         $this->name = $name;
         $this->arrayValue = $arrayValue;
