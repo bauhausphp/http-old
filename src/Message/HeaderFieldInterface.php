@@ -8,4 +8,5 @@ interface HeaderFieldInterface
     public function valueAsArray(): array;
     public function valueAsString(): string;
     public function withValueAppend($value): HeaderFieldInterface;
+    public function withNewValue($value): HeaderFieldInterface;
 }

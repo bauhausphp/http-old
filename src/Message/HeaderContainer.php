@@ -62,8 +62,7 @@ class HeaderContainer extends Container implements HeaderContainerInterface
             );
         }
 
-        $oldHeader = $this->get($name);
-        $newHeader = new HeaderField($oldHeader->name(), $value);
+        $newHeader = $this->get($name)->withNewValue($value);
 
         return $this->containerFactory()->containerWithItemReplaced(
             $this,

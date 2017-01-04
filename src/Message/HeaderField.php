@@ -38,7 +38,11 @@ class HeaderField implements HeaderFieldInterface
             $this->name(),
             array_merge($this->arrayValue, $this->transformValueToArray($value))
         );
+    }
 
+    public function withNewValue($value): HeaderFieldInterface
+    {
+        return new HeaderField($this->name(), $value);
     }
 
     private function transformValueToArray($value): array
