@@ -30,14 +30,13 @@ class HeaderField implements HeaderFieldInterface
         return implode(', ', $this->arrayValue);
     }
 
-    public function appendValue($value): HeaderFieldInterface
+    public function withValueAppend($value): HeaderFieldInterface
     {
-        $newValue = array_merge(
-            $this->valueAsArray(),
-            $this->transformValueToArray($value)
+        return new HeaderField(
+            $this->name(),
+            array_merge($this->arrayValue, $this->transformValueToArray($value))
         );
 
-        return new HeaderField($this->name(), $newValue);
     }
 
     private function transformValueToArray($value): array
