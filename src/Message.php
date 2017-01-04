@@ -35,7 +35,9 @@ abstract class Message implements MessageInterface
 
     public function withProtocolVersion($versionNumber)
     {
-        return $this->withFieldUpdated(new Protocol($versionNumber));
+        $newProtocol = new Protocol($versionNumber);
+
+        return $this->withFieldUpdated($newProtocol);
     }
 
     public function getProtocolVersion()
@@ -70,17 +72,23 @@ abstract class Message implements MessageInterface
 
     public function withHeader($name, $value)
     {
-        return $this->withFieldUpdated($this->headers->withHeader($name, $value));
+        $newHeaders = $this->headers->withHeader($name, $value);
+
+        return $this->withFieldUpdated($newHeaders);
     }
 
     public function withAddedHeader($name, $value)
     {
-        return $this->withFieldUpdated($this->headers->withAddedHeader($name, $value));
+        $newHeaders = $this->headers->withAddedHeader($name, $value);
+
+        return $this->withFieldUpdated($newHeaders);
     }
 
     public function withoutHeader($name)
     {
-        return $this->withFieldUpdated($this->headers->withoutHeader($name));
+        $newHeaders = $this->headers->withoutHeader($name);
+
+        return $this->withFieldUpdated($newHeaders);
     }
 
     public function headers(): HeaderContainerInterface
