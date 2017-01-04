@@ -9,12 +9,11 @@ class HeaderField implements HeaderFieldInterface
 
     public function __construct(string $name, $value)
     {
-        $arrayValue = $this->transformValueToArray($value);
         // TODO validate $name
         // TODO validate $value
 
         $this->name = $name;
-        $this->arrayValue = $arrayValue;
+        $this->arrayValue = $this->transformValueToArray($value);
     }
 
     public function name(): string
@@ -47,10 +46,10 @@ class HeaderField implements HeaderFieldInterface
 
     private function transformValueToArray($value): array
     {
-        if (is_string($value)) {
-            return [$value];
-        } elseif (is_array($value)) {
+        if (is_array($value)) {
             return $value;
         }
+
+        return [$value];
     }
 }
