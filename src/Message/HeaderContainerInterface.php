@@ -10,4 +10,5 @@ interface HeaderContainerInterface
     public function asArray(): array;
     public function withHeader(string $name, $value): HeaderContainerInterface;
     public function withAddedHeader(string $name, $value): HeaderContainerInterface;
+    public function withoutHeader(string $name): HeaderContainerInterface;
 }

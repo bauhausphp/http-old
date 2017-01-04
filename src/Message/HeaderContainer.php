@@ -6,6 +6,7 @@ use Bauhaus\Container;
 use Bauhaus\Container\Factory as ContainerFactory;
 use Bauhaus\Container\ItemNotFoundException;
 use Bauhaus\Http\Message\HeaderContainerInterface;
+use Bauhaus\Http\Message\HeaderField;
 
 class HeaderContainer extends Container implements HeaderContainerInterface
 {
@@ -53,11 +54,18 @@ class HeaderContainer extends Container implements HeaderContainerInterface
 
     public function withHeader(string $name, $value): HeaderContainerInterface
     {
-        $containerFactory = new ContainerFactory();
+        if (false === $this->has($name)) {
+            return $this->containerFactory()->containerWithItemAdded(
+                $this,
+                $this->generateCaseInsensitiveHeaderName($name),
+                new HeaderField($name, $value)
+            );
+        }
 
-        $newHeader = new HeaderField($name, $value);
+        $oldHeader = $this->get($name);
+        $newHeader = new HeaderField($oldHeader->name(), $value);
 
-        return $containerFactory->containerWithItemAdded(
+        return $this->containerFactory()->containerWithItemReplaced(
             $this,
             $this->generateCaseInsensitiveHeaderName($name),
             $newHeader
@@ -70,20 +78,35 @@ class HeaderContainer extends Container implements HeaderContainerInterface
             return $this->withHeader($name, $value);
         }
 
-        $containerFactory = new ContainerFactory();
-
         $oldHeader = $this->get($name);
         $newHeader = $oldHeader->appendValue($value);
 
-        return $containerFactory->containerWithItemReplaced(
+        return $this->containerFactory()->containerWithItemReplaced(
             $this,
             $this->generateCaseInsensitiveHeaderName($name),
             $newHeader
         );
     }
 
+    public function withoutHeader(string $name): HeaderContainerInterface
+    {
+        if (false === $this->has($name)) {
+            return $this;
+        }
+
+        return $this->containerFactory()->containerWithoutItem(
+            $this,
+            $this->generateCaseInsensitiveHeaderName($name)
+        );
+    }
+
     private function generateCaseInsensitiveHeaderName(string $name): string
     {
         return strtolower($name);
+    }
+
+    private function containerFactory(): ContainerFactory
+    {
+        return new ContainerFactory();
     }
 }

@@ -4,6 +4,7 @@ namespace Bauhaus\Http;
 
 use Bauhaus\Http\Message;
 use Bauhaus\Http\Message\ProtocolInterface;
+use Bauhaus\Http\Message\HeaderContainerInterface;
 use Bauhaus\Http\ResponseInterface;
 use Bauhaus\Http\Response\Status;
 use Bauhaus\Http\Response\StatusInterface;
@@ -16,7 +17,8 @@ class Response extends Message implements ResponseInterface
 
     public function __construct(
         StatusInterface $status = null,
-        ProtocolInterface $protocol = null
+        ProtocolInterface $protocol = null,
+        HeaderContainerInterface $headers = null
     ) {
         if (null === $status) {
             $status = new Status(self::DEFAULT_STATUS_CODE);
@@ -24,14 +26,12 @@ class Response extends Message implements ResponseInterface
 
         $this->status = $status;
 
-        parent::__construct($protocol);
+        parent::__construct($protocol, $headers);
     }
 
     public function withStatus($code, $reasonPhrase = '')
     {
-        $status = new Status($code, $reasonPhrase);
-
-        return new self($status);
+        return $this->withFieldUpdated(new Status($code, $reasonPhrase));
     }
 
     public function getStatusCode()

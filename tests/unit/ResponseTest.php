@@ -2,12 +2,27 @@
 
 namespace Bauhaus\Http;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends MessageBaseTest
 {
+    private $response = null;
+
+    protected function setUp()
+    {
+        $this->baseSetUp();
+
+        $this->response = $this->message
+            ->withStatus(100);
+    }
+
+    protected function defaultMessageObject(): MessageInterface
+    {
+        return new Response();
+    }
+
     /**
      * @test
      */
-    public function responseIsCreatedWithTheStatusCode200IfNoneIsGiven()
+    public function responseIsCreatedWithTheStatusCode200AsDefault()
     {
         $response = new Response();
 
@@ -18,13 +33,13 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function createResponseWithRecommendedReasonPhraseForTheGivenStatusCode()
+    public function createNewResponseGivenAStatusCodeExpectingItsRecommendedReasonPhrase()
     {
-        $response = new Response();
+        $newResponse = $this->response->withStatus(202);
 
-        $newResponse = $response->withStatus(202);
+        $this->assertThatNewMessageWasCreated($this->response, $newResponse);
+        $this->assertThatMessageFieldsAreEquals($this->response, $newResponse);
 
-        $this->assertNotSame($response, $newResponse);
         $this->assertEquals(202, $newResponse->getStatusCode());
         $this->assertEquals('Accepted', $newResponse->getReasonPhrase());
     }
@@ -32,13 +47,13 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function createResponseGivenAStatusCodeAndAReasonPhrase()
+    public function createNewResponseGivenAStatusCodeAndAReasonPhrase()
     {
-        $response = new Response();
+        $newResponse = $this->response->withStatus(202, 'Processing request');
 
-        $newResponse = $response->withStatus(202, 'Processing request');
+        $this->assertThatNewMessageWasCreated($this->response, $newResponse);
+        $this->assertThatMessageFieldsAreEquals($this->response, $newResponse);
 
-        $this->assertNotSame($response, $newResponse);
         $this->assertEquals(202, $newResponse->getStatusCode());
         $this->assertEquals('Processing request', $newResponse->getReasonPhrase());
     }
