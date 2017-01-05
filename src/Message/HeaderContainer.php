@@ -22,24 +22,16 @@ class HeaderContainer extends Container implements HeaderContainerInterface
 
     public function getValueAsArrayOf(string $name): array
     {
-        try {
-            $header = $this->get($name);
-        } catch (ItemNotFoundException $e) {
-            return [];
-        }
+        $header = $this->get($name);
 
-        return $header->valueAsArray();
+        return null === $header ? [] : $header->valueAsArray();
     }
 
     public function getValueAsStringOf(string $name): string
     {
-        try {
-            $header = $this->get($name);
-        } catch (ItemNotFoundException $e) {
-            return '';
-        }
+        $header = $this->get($name);
 
-        return $header->valueAsString();
+        return null === $header ? '' : $header->valueAsString();
     }
 
     public function asArray(): array
@@ -91,6 +83,11 @@ class HeaderContainer extends Container implements HeaderContainerInterface
         $label = $this->generateCaseInsensitiveHeaderName($name);
 
         return $this->factory()->containerWithoutItem($label);
+    }
+
+    protected function itemNotFoundHandler(string $label)
+    {
+        return null;
     }
 
     private function generateCaseInsensitiveHeaderName(string $name): string
