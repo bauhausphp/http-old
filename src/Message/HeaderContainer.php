@@ -54,19 +54,18 @@ class HeaderContainer extends Container implements HeaderContainerInterface
 
     public function withHeader(string $name, $value): HeaderContainerInterface
     {
+        $label = $this->generateCaseInsensitiveHeaderName($name);
+
         if (false === $this->has($name)) {
-            return $this->factory()->containerWithItemAdded(
-                $this->generateCaseInsensitiveHeaderName($name),
-                new HeaderField($name, $value)
-            );
+            $newHeader = new HeaderField($name, $value);
+
+            return $this->factory()->containerWithItemAdded($label, $newHeader);
         }
 
-        $newHeader = $this->get($name)->withNewValue($value);
+        $currentHeader = $this->get($name);
+        $newHeader = $currentHeader->withNewValue($value);
 
-        return $this->factory()->containerWithItemReplaced(
-            $this->generateCaseInsensitiveHeaderName($name),
-            $newHeader
-        );
+        return $this->factory()->containerWithItemReplaced($label, $newHeader);
     }
 
     public function withAddedHeader(string $name, $value): HeaderContainerInterface
@@ -75,12 +74,12 @@ class HeaderContainer extends Container implements HeaderContainerInterface
             return $this->withHeader($name, $value);
         }
 
-        $newHeader = $this->get($name)->withValueAppend($value);
+        $label = $this->generateCaseInsensitiveHeaderName($name);
 
-        return $this->factory()->containerWithItemReplaced(
-            $this->generateCaseInsensitiveHeaderName($name),
-            $newHeader
-        );
+        $currentHeader = $this->get($name);
+        $newHeader = $currentHeader->withValueAppend($value);
+
+        return $this->factory()->containerWithItemReplaced($label, $newHeader);
     }
 
     public function withoutHeader(string $name): HeaderContainerInterface
@@ -89,9 +88,9 @@ class HeaderContainer extends Container implements HeaderContainerInterface
             return $this;
         }
 
-        return $this->factory()->containerWithoutItem(
-            $this->generateCaseInsensitiveHeaderName($name)
-        );
+        $label = $this->generateCaseInsensitiveHeaderName($name);
+
+        return $this->factory()->containerWithoutItem($label);
     }
 
     private function generateCaseInsensitiveHeaderName(string $name): string
