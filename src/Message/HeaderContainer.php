@@ -3,7 +3,7 @@
 namespace Bauhaus\Http\Message;
 
 use Bauhaus\Container;
-use Bauhaus\Container\Factory as ContainerFactory;
+use Bauhaus\Container\Factory;
 use Bauhaus\Container\ItemNotFoundException;
 use Bauhaus\Http\Message\HeaderContainerInterface;
 use Bauhaus\Http\Message\HeaderField;
@@ -55,8 +55,7 @@ class HeaderContainer extends Container implements HeaderContainerInterface
     public function withHeader(string $name, $value): HeaderContainerInterface
     {
         if (false === $this->has($name)) {
-            return $this->containerFactory()->containerWithItemAdded(
-                $this,
+            return $this->factory()->containerWithItemAdded(
                 $this->generateCaseInsensitiveHeaderName($name),
                 new HeaderField($name, $value)
             );
@@ -64,8 +63,7 @@ class HeaderContainer extends Container implements HeaderContainerInterface
 
         $newHeader = $this->get($name)->withNewValue($value);
 
-        return $this->containerFactory()->containerWithItemReplaced(
-            $this,
+        return $this->factory()->containerWithItemReplaced(
             $this->generateCaseInsensitiveHeaderName($name),
             $newHeader
         );
@@ -79,8 +77,7 @@ class HeaderContainer extends Container implements HeaderContainerInterface
 
         $newHeader = $this->get($name)->withValueAppend($value);
 
-        return $this->containerFactory()->containerWithItemReplaced(
-            $this,
+        return $this->factory()->containerWithItemReplaced(
             $this->generateCaseInsensitiveHeaderName($name),
             $newHeader
         );
@@ -92,8 +89,7 @@ class HeaderContainer extends Container implements HeaderContainerInterface
             return $this;
         }
 
-        return $this->containerFactory()->containerWithoutItem(
-            $this,
+        return $this->factory()->containerWithoutItem(
             $this->generateCaseInsensitiveHeaderName($name)
         );
     }
@@ -103,8 +99,8 @@ class HeaderContainer extends Container implements HeaderContainerInterface
         return strtolower($name);
     }
 
-    private function containerFactory(): ContainerFactory
+    private function factory(): Factory
     {
-        return new ContainerFactory();
+        return new Factory($this);
     }
 }
