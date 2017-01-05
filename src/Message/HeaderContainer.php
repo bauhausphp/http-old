@@ -12,12 +12,16 @@ class HeaderContainer extends Container implements HeaderContainerInterface
 {
     public function has($name)
     {
-        return parent::has($this->generateCaseInsensitiveHeaderName($name));
+        $label = $this->generateCaseInsensitiveHeaderName($name);
+
+        return parent::has($label);
     }
 
     public function get($name)
     {
-        return parent::get($this->generateCaseInsensitiveHeaderName($name));
+        $label = $this->generateCaseInsensitiveHeaderName($name);
+
+        return parent::get($label);
     }
 
     public function getValueAsArrayOf(string $name): array
@@ -62,11 +66,13 @@ class HeaderContainer extends Container implements HeaderContainerInterface
 
     public function withAddedHeader(string $name, $value): HeaderContainerInterface
     {
-        if (false === $this->has($name)) {
-            return $this->withHeader($name, $value);
-        }
-
         $label = $this->generateCaseInsensitiveHeaderName($name);
+
+        if (false === $this->has($name)) {
+            $newHeader = new HeaderField($name, $value);
+
+            return $this->factory()->containerWithItemAdded($label, $newHeader);
+        }
 
         $currentHeader = $this->get($name);
         $newHeader = $currentHeader->withValueAppend($value);
